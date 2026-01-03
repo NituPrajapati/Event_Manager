@@ -1,0 +1,196 @@
+PHASE 0 — PLANNING (DO ON PAPER FIRST)
+
+☐ Roles: ADMIN, USER
+☐ Pages:
+
+Home (public)
+
+Login
+
+Register
+
+Admin Dashboard
+
+Enroll Form
+
+☐ APIs needed:
+
+Auth
+
+Events
+
+Enrollment
+
+👉 Now start coding.
+
+⚙️ PHASE 1 — BACKEND (MOST IMPORTANT)
+🔹 STEP 1: Backend Setup
+
+☐ Create backend/
+☐ npm init -y
+☐ Install dependencies:
+
+npm install express mongoose cors dotenv jsonwebtoken bcryptjs
+npm install --save-dev nodemon
+
+
+☐ package.json
+
+"scripts": {
+  "dev": "nodemon src/server.js"
+}
+
+🔹 STEP 2: Backend Folder Structure
+backend/src/
+ ├─ config/
+ │   └─ db.js
+ ├─ models/
+ │   ├─ User.js
+ │   ├─ Event.js
+ │   └─ Enrollment.js
+ ├─ routes/
+ │   ├─ authRoutes.js
+ │   ├─ eventRoutes.js
+ │   └─ enrollmentRoutes.js
+ ├─ middleware/
+ │   ├─ authMiddleware.js
+ │   └─ roleMiddleware.js
+ └─ server.js
+
+🔹 STEP 3: Environment Variables
+
+Create .env
+
+PORT=5000
+MONGO_URI=your_mongo_url
+JWT_SECRET=super_secret_key
+
+🔹 STEP 4: MongoDB Connection
+
+☐ config/db.js
+
+🔹 STEP 5: User Model (bcrypt will be used here)
+
+☐ User.js
+
+Fields:
+
+name
+
+email
+
+password (hashed)
+
+role (ADMIN / USER)
+
+👉 Hash password before save.
+
+🔹 STEP 6: Auth APIs (JWT + bcrypt)
+
+☐ POST /api/auth/register
+
+Hash password using bcrypt
+
+Save user
+
+Return success
+
+☐ POST /api/auth/login
+
+Compare password using bcrypt
+
+Generate JWT
+
+Return token + role
+
+👉 DO NOT SKIP THIS STEP
+
+🔹 STEP 7: Auth Middleware (JWT verification)
+
+☐ Create authMiddleware.js
+
+Responsibilities:
+
+Read token from header
+
+Verify JWT
+
+Attach user to req.user
+
+🔹 STEP 8: Role Middleware (RBAC)
+
+☐ Create roleMiddleware.js
+
+Logic:
+
+If role !== ADMIN → deny
+
+Used only on admin routes
+
+🔹 STEP 9: Event APIs
+Public
+
+☐ GET /api/events → list all events
+
+Admin only
+
+☐ POST /api/events → create event
+☐ DELETE /api/events/:id → delete event
+
+(Admin routes use auth + role middleware)
+
+🔹 STEP 10: Enrollment API
+
+☐ POST /api/enroll
+
+Only logged-in users
+
+Save eventId + user info
+
+🔹 STEP 11: Test Backend (MANDATORY)
+
+☐ Test register
+☐ Test login (get JWT)
+☐ Test admin routes with token
+☐ Test user enrollment
+
+🚫 Frontend must NOT start until this works
+
+🎨 PHASE 2 — FRONTEND (REACT)
+🔹 STEP 12: Pages
+
+☐ Home.jsx
+☐ Login.jsx
+☐ Register.jsx
+☐ AdminDashboard.jsx
+☐ EnrollForm.jsx
+
+🔹 STEP 13: Auth Context (IMPORTANT)
+
+☐ Store:
+
+JWT token
+
+user role
+
+☐ Provide:
+
+login()
+
+logout()
+
+🔹 STEP 14: Protected Routes
+
+☐ Protect Admin routes
+☐ Protect Enrollment
+
+🔹 STEP 15: Connect APIs
+
+☐ Login → /auth/login
+☐ Register → /auth/register
+☐ Events → /events
+☐ Enroll → /enroll
+
+Pass JWT in headers:
+
+Authorization: Bearer token
