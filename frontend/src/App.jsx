@@ -1,7 +1,11 @@
 import './App.css'
-import Role from './components/Role.jsx';
-import{ Route, Routes} from 'react-router-dom';
-import Home from './components/Home.jsx';
+import{ BrowserRouter, Route, Routes} from 'react-router-dom';
+import Navbar from './components/Navbar.jsx';
+import Login from './pages/Login.jsx';
+import Register from './pages/Register.jsx';
+import Home from './pages/Home.jsx';
+import UserDashboard from './pages/UserDashboard.jsx';
+
 
 
 function App() {
@@ -9,10 +13,15 @@ function App() {
 
   return (
     <>
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path='/role' element={<Role />} />
-    </Routes>
+    <BrowserRouter>
+      <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/userDashboard" element={<UserDashboard />} />
+        </Routes>
+    </BrowserRouter>
     </>
   )
 }

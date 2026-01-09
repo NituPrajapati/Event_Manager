@@ -3,10 +3,17 @@ const DBconnection = require('./config/db');
 const dotenv = require('dotenv').config();
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
+const cors = require('cors');
 
 DBconnection();
 
 const app = express();
+
+// Allow frontend origin
+app.use(cors({
+  origin: "http://localhost:5173", // your frontend port
+  credentials: true, // optional, if you use cookies
+}));
 
 //Middleware
 app.use(express.json());

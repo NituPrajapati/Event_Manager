@@ -194,3 +194,125 @@ logout()
 Pass JWT in headers:
 
 Authorization: Bearer token
+
+
+frontend
+FRONTEND FOLDER STRUCTURE
+client/
+└── src/
+    ├── api/
+    │   └── api.js                 # Axios instance for backend API calls
+    │
+    ├── auth/
+    │   ├── AuthContext.jsx        # Global auth state (token + role)
+    │   └── useAuth.js             # Custom hook to use auth context
+    │
+    ├── components/
+    │   ├── ProtectedRoute.jsx     # Route guard (frontend UX only)
+    │   ├── Navbar.jsx             # Navigation bar (role-based links)
+    │   └── EventCard.jsx          # Display single event
+    │
+    ├── pages/
+    │   ├── Login.jsx              # Login page
+    │   ├── AdminDashboard.jsx     # Admin panel (create/update/delete events)
+    │   ├── UserDashboard.jsx      # User panel (view events)
+    │   ├── Events.jsx             # Shared event list page
+    │   └── Unauthorized.jsx       # Access denied page
+    │
+    ├── utils/
+    │   └── helpers.js             # Optional helper functions
+    │
+    ├── App.jsx                     # Main routing
+    └── main.jsx                    # App bootstrap
+
+🔑 Explanation of each folder/file
+1️⃣ api/
+
+Purpose: Central place for all API calls
+
+Why: Avoids repeating base URLs and token headers
+
+File: api.js
+
+import axios from 'axios';
+
+const API = axios.create({
+  baseURL: 'http://localhost:4000/api', // backend URL
+});
+
+API.interceptors.request.use((req) => {
+  const token = localStorage.getItem('token');
+  if (token) req.headers.Authorization = `Bearer ${token}`;
+  return req;
+});
+
+export default API;
+
+2️⃣ auth/
+
+Purpose: Centralized authentication state
+
+Files:
+
+AuthContext.jsx → Stores token, user info, login/logout
+
+useAuth.js → Custom hook to access AuthContext easily
+
+3️⃣ components/
+
+Purpose: Reusable UI pieces
+
+Examples:
+
+ProtectedRoute.jsx → Guards routes based on role
+
+Navbar.jsx → Shows different links for admin/user
+
+EventCard.jsx → Displays event info
+
+4️⃣ pages/
+
+Purpose: Full pages corresponding to routes
+
+Examples:
+
+Login.jsx → Login form
+
+AdminDashboard.jsx → Admin features (CRUD events)
+
+UserDashboard.jsx → User dashboard
+
+Events.jsx → Event list for both roles
+
+Unauthorized.jsx → Access denied page
+
+5️⃣ utils/
+
+Purpose: Optional helpers like date formatting, sorting, etc.
+
+6️⃣ App.jsx
+
+Purpose: Main router
+
+Contains: React-Router routes with ProtectedRoute guards
+
+7️⃣ main.jsx
+
+Purpose: App entry point
+
+Wraps <App /> inside <AuthProvider /> so auth state is global
+
+🧭 Route Flow Example
+Route	Component	Access
+/login	Login.jsx	Public
+/admin	AdminDashboard.jsx	Protected (admin)
+/user	UserDashboard.jsx	Protected (user)
+/events	Events.jsx	Protected (admin + user)
+/unauthorized	Unauthorized.jsx	Public (for blocked roles)
+🔐 RBAC Mapping Frontend ↔ Backend
+
+Frontend only hides buttons/redirects based on role (UX)
+
+Backend enforces security (must always check token + role)
+
+Frontend calls backend via api.js, attaching JWT
