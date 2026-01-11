@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useContext } from "react";
-import { AuthContext } from "./AuthContext.jsx";
+import  AuthContext  from "./AuthContext.jsx";
 import UserDashboard from "../pages/UserDashboard.jsx";
 import AdminDashboard from "../pages/AdminDashboard.jsx";
 
