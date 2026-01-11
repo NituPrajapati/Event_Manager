@@ -9,8 +9,8 @@ router.get('/admin', verifyToken, authorizeRoles('admin'),(req, res) => {
     }
 );
 //only user can access
-router.get('/user', verifyToken, authorizeRoles('user'),(req, res) => {
-    res.send('Admin access only');
+router.get('/user', verifyToken, authorizeRoles('user','admin'),(req, res) => {
+    res.send('User & Admin access only');
     }
 );
 

@@ -7,6 +7,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -26,6 +27,8 @@ const Login = () => {
       setError(err.response?.data?.message || "Login failed");
     }
   };
+
+  {loading && <div>Loading...</div>}
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
