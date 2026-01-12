@@ -1,22 +1,18 @@
 import { Navigate } from "react-router-dom";
 import { useContext } from "react";
-import  AuthContext  from "./AuthContext.jsx";
-import UserDashboard from "../pages/UserDashboard.jsx";
-import AdminDashboard from "../pages/AdminDashboard.jsx";
+import { AuthContext } from "./AuthContext.jsx";
 
 const ProtectedRoute = ({ allowedRoles, children }) => {
-  const { user } = useContext(AuthContext);
-  if (user==null) return <Navigate to="/login" />;
+  const { user, loading } = useContext(AuthContext);
+
+  if (loading) return <div>Loading...</div>;
+  if (!user) return <Navigate to="/login" replace />;
 
   if (!allowedRoles.includes(user.role)) {
-    return <Navigate
-            to={user.role === "admin" ? "/adminDashboard" : "/userDashboard"}
-            replace
-        />
+    return <Navigate to="/unauthorized" replace />; // safer
   }
 
   return children;
 };
 
 export default ProtectedRoute;
-export { ProtectedRoute };

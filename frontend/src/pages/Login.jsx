@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState,useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import {AuthContext} from "../context/AuthContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -9,22 +9,28 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
+
+  const auth = useContext(AuthContext);
+console.log(auth);
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     setError("");
-
     try {
       const res = await axios.post("http://localhost:3000/api/auth/login", {
         email,
         password,
       });
-
-      localStorage.setItem("token", res.data.token);
-
+      
+      login(res.data.token);
+      console.log(res.data.token);
       navigate("/userDashboard"); // RBAC will decide access
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
+    }finally{
+      setLoading(false);
     }
   };
 
