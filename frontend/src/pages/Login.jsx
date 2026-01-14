@@ -11,30 +11,35 @@ const Login = () => {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
-  const auth = useContext(AuthContext);
-console.log(auth);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setError("");
 
-  const handleSubmit = async (e) => {
-    setLoading(true);
-    e.preventDefault();
-    setError("");
-    try {
-      const res = await axios.post("http://localhost:3000/api/auth/login", {
-        email,
-        password,
-      });
-      
-      login(res.data.token);
-      console.log(res.data.token);
-      navigate("/userDashboard"); // RBAC will decide access
-    } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
-    }finally{
-      setLoading(false);
+  try {
+    const res = await axios.post(
+      "http://localhost:3000/api/auth/login",
+      { email, password }
+    );
+
+    const token = res.data.token; 
+    login(token);
+
+    // Decode token to decide route
+    const decoded = JSON.parse(atob(token.split(".")[1]));
+
+    if (decoded.role === "admin") {
+      navigate("/adminDashboard");
+    } else {
+      navigate("/userDashboard");
     }
-  };
 
-  {loading && <div>Loading...</div>}
+  } catch (err) {
+    setError(err.response?.data?.message || "Login failed");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -45,7 +50,11 @@ console.log(auth);
         <h2 className="text-2xl font-bold text-center mb-6">
           Login
         </h2>
-
+        {loading && (
+          <p className="text-center text-sm text-gray-500 mb-4">
+            Logging in...
+          </p>
+        )}
         {error && (
           <p className="text-red-500 text-sm mb-4 text-center">
             {error}

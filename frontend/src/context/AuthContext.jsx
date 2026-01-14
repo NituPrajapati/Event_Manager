@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       try {
         const decodedUser = jwtDecode(token);
-
+        console.log("Decoded JWT:", decodedUser);
         // Optional: check token expiry
         const now = Date.now() / 1000; // current time in seconds
         if (decodedUser.exp && decodedUser.exp < now) {
@@ -31,6 +31,14 @@ export const AuthProvider = ({ children }) => {
     }
     setLoading(false);
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      console.log("User logged in");
+      console.log("Name:", user.username);
+      console.log("Role:", user.role);
+    }
+  }, [user]);
 
   // Call this after successful login
   const login = (token) => {
