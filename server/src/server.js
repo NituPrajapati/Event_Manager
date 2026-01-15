@@ -4,6 +4,7 @@ const dotenv = require('dotenv').config();
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const cors = require('cors');
+const eventRoutes = require('./routes/eventRoutes');
 
 DBconnection();
 
@@ -11,7 +12,7 @@ const app = express();
 
 // Allow frontend origin
 app.use(cors({
-  origin: "http://localhost:5173", // your frontend port
+  origin: "http://localhost:5173", //frontend port
   credentials: true, // optional, if you use cookies
 }));
 
@@ -23,6 +24,7 @@ app.use((req, res, next) => {
   next();
 });
 //Routes
+app.use("/api/events", eventRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 
