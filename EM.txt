@@ -316,3 +316,8 @@ Frontend only hides buttons/redirects based on role (UX)
 Backend enforces security (must always check token + role)
 
 Frontend calls backend via api.js, attaching JWT
+
+changes 
+rendering is slow for some reason check check window confirm 
+add pagination and lazy loading if card are more
+2 Backend Security (The Real Shield): When deleteEvent(id) is called, it sends a request to your server. Your server should check the JWT Token of the person sending the request.

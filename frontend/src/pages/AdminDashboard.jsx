@@ -6,8 +6,8 @@ import { getAllEvents } from "../api/eventApi";
 const AdminDashboard = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
-  // 'view' can be "create" or "list"
-  const [activeTab, setActiveTab] = useState("create"); 
+  const [activeTab, setActiveTab] = useState("create");
+  const [editingEvent, setEditingEvent] = useState(null); 
 
   const fetchEvents = async () => {
     setLoading(true);
@@ -22,8 +22,17 @@ const AdminDashboard = () => {
     }
   }, [activeTab]);
 
+  const prepareUpdate = (event) => {
+    setEditingEvent(event); 
+    setActiveTab("create"); // This switches the UI to the Form
+  };
+
   if (loading) {
-    return <div className="text-gray-800 text-4xl">Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-indigo-600 text-2xl font-bold animate-pulse">Loading Events...</div>
+      </div>
+    );
   }
 
   return (
@@ -58,25 +67,31 @@ const AdminDashboard = () => {
         </div>
 
         {/* Conditional Page Rendering */}
-        <div className="mt-6">
+          <div className="mt-6">
           {activeTab === "create" ? (
-            <div className="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-sm border border-gray-200">
-              <h3 className="text-lg font-medium text-gray-900 mb-6">Enter Event Details</h3>
-              <EventForm refreshEvents={fetchEvents} />
+            <div className="max-w-2xl mx-auto">
+              {/* FIXED: Passed editingEvent props here */}
+              <EventForm 
+                refreshEvents={fetchEvents} 
+                editingEvent={editingEvent} 
+                setEditingEvent={setEditingEvent} 
+              />
             </div>
           ) : (
             <div className="animate-in fade-in duration-500">
+              {/* FIXED: Passed onEdit prop here */}
               <EventList 
                 events={events} 
                 isAdmin={true} 
-                refreshEvents={fetchEvents} 
+                refreshEvents={fetchEvents}
+                onEdit={prepareUpdate} 
               />
             </div>
           )}
         </div>
+        </div>
 
       </div>
-    </div>
   );
 };
 
