@@ -8,6 +8,8 @@ import UserDashboard from './pages/UserDashboard.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import ProtectedRoute from './context/ProtectedRoute.jsx';
 import Unauthorized from "./pages/Unauthorized.jsx";
+import EventList from './components/EventList.jsx';
+
 
 function App() {
   
@@ -27,7 +29,8 @@ function App() {
               <AdminDashboard />
             </ProtectedRoute>} />
           <Route path="/unauthorized" element={<Unauthorized />} />
-        </Routes>
+          <Route path="/eventList" element={<EventList />} />
+        </Routes>    
     </BrowserRouter>
     </>
   )

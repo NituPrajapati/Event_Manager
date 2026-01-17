@@ -52,7 +52,7 @@ const updateEvent = async (req, res) => {
 //DELETE EVENT
 const deleteEvent = async (req, res) => {
     try {
-        const deletedEvent = await Event.findByIdAndRemove(req.params.id);
+        const deletedEvent = await Event.findByIdAndDelete(req.params.id);
         if (!deletedEvent){
             return res.status(404).json({ message: 'Event not found' });
         }
